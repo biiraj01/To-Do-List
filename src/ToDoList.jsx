@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 
 function ToDoList(){
-    const[tasks,setTask] = useState(["Eat","take","wake"]);
+    const[tasks,setTask] = useState(["Wake Up","Have breakfast","Go to college","Code"]);
     const[newTask,setNewTask] = useState([]);
 
     function handleInputChange(event){
@@ -9,23 +9,34 @@ function ToDoList(){
     }
 
     function addTask(){
-
+       if(newTask.trim() !== ""){
+         setTask(t=>[...t,newTask]);
+        setNewTask("");
+       }
     }
     function deleteTask(index){
-
+        const updatedTasks = tasks.filter((_,i)=>i!== index);
+        setTask(updatedTasks);
     }
     function moveTaskUp(index){
-
+        if(index > 0){
+            const updatedTasks = [...tasks];
+            [updatedTasks[index],updatedTasks[index-1]] =[updatedTasks[index-1],updatedTasks[index]];
+            setTask(updatedTasks);
+        }
     }
     function moveTaskDown(index){
-        
+        if(index < tasks.length - 1){
+            const updatedTasks = [...tasks];
+            [updatedTasks[index],updatedTasks[index+1]] =[updatedTasks[index+1],updatedTasks[index]];
+            setTask(updatedTasks);
+        }
     }
 
     return(
         <>
-         <h1>To-Do-List</h1>
         <div className="to-do-list">
-
+            <h1>To-Do-List</h1>
             <div className="container">
                 <input type="text" 
                 value={newTask}
@@ -34,7 +45,7 @@ function ToDoList(){
                 <button className="add-task" onClick={addTask}>Add</button>
             </div>
 
-            <ul>
+            <ol>
                 {tasks.map((task, index) =>
                     <li key={index}>
                         <span className="text">{task}</span>
@@ -43,7 +54,7 @@ function ToDoList(){
                     <button className="move-task-down" onClick={()=>moveTaskDown(index)}>👇</button>
                     </li>   
                 )}
-            </ul>
+            </ol>
         </div>
     </>
     )
